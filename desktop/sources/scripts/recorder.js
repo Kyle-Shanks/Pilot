@@ -48,7 +48,7 @@ export default function Recorder (pilot) {
   }
 
   this.toggle = function () {
-    if (this.isRecording !== true) {
+    if (!this.isRecording) {
       this.start()
     } else {
       this.stop()

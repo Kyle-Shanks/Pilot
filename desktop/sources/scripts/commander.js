@@ -10,9 +10,6 @@ export default function Commander (pilot) {
   // Index of history command to show in input.
   this.historyIndex = 0
 
-  // Holds whether the user is browsing the history or not.
-  this.isBrowsingHistory = false
-
   this.install = function (host) {
     this.el.appendChild(this.input)
     host.appendChild(this.el)
@@ -22,41 +19,24 @@ export default function Commander (pilot) {
     this.input.focus()
   }
 
-  this.input.oninput = (e) => {
-
-  }
-
   this.input.onkeydown = (e) => {
     switch (e.keyCode) {
       case 40: // Down
         e.preventDefault()
-        if (!this.isBrowsingHistory) {
-          return
-        }
+        if (this.historyIndex === this.history.length) return
+        this.historyIndex += 1
 
-        if (this.history.length) {
-          if (this.historyIndex === this.history.length - 1) {
-            this.isBrowsingHistory = false
-            this.input.value = ''
-            return
-          }
-
-          this.historyIndex += 1
+        if (this.historyIndex === this.history.length) {
+          this.input.value = ''
+        } else {
           this.input.value = this.history[this.historyIndex]
         }
         break
       case 38: // Up
         e.preventDefault()
-        if (!this.isBrowsingHistory) {
-          this.historyIndex = this.history.length
-        }
-
-        this.isBrowsingHistory = true
         if (this.history.length && this.historyIndex > 0) {
-          this.historyIndex -= 1
-          this.input.value = this.history[this.historyIndex]
+          this.input.value = this.history[--this.historyIndex]
         }
-
         break
     }
   }
@@ -64,8 +44,11 @@ export default function Commander (pilot) {
   this.input.onkeypress = (e) => {
     if (e.keyCode !== 13) { return }
     e.preventDefault()
-    this.isBrowsingHistory = false
-    this.history.push(this.input.value)
+    if (this.input.value !== this.history[this.history.length - 1]) {
+      this.history.push(this.input.value)
+    }
+    this.historyIndex = this.history.length;
+
     pilot.mixer.run(this.input.value)
     this.input.value = ''
   }

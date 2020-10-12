@@ -39,8 +39,8 @@ export default function Pilot () {
     this.theme.start()
   }
 
-  this.toggleAnimations = function (mod, set = false) {
-    this.animate = this.animate !== true
+  this.toggleAnimations = function () {
+    this.animate = !this.animate
   }
 
   this.modZoom = function (mod = 0, set = false) {

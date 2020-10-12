@@ -2,8 +2,6 @@ import Interface from './interface.js'
 import transposeTable from './transpose.js'
 'use strict'
 
-const Tone = require('tone')
-
 const OCTAVE = ['C', 'c', 'D', 'd', 'E', 'F', 'f', 'G', 'g', 'A', 'a', 'B']
 const MAJOR = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
 const MINOR = ['c', 'd', 'F', 'f', 'g', 'a', 'C']
@@ -99,15 +97,15 @@ export default function ChannelInterface (pilot, id, node) {
   }
 
   this.updateEnv = function (data, force = false) {
-    if (pilot.animate !== true) { return }
-    if (force !== true && (!data || !data.isEnv)) { return }
+    if (!pilot.animate) { return }
+    if (!force && (!data || !data.isEnv)) { return }
     if (!this.node.envelope) { return }
     setContent(this.env_el, `${to16(this.node.envelope.attack)}${to16(this.node.envelope.decay)}${to16(this.node.envelope.sustain)}${to16(this.node.envelope.release)}`)
   }
 
   this.updateOsc = function (data, force = false) {
-    if (pilot.animate !== true) { return }
-    if (force !== true && (!data || !data.isOsc)) { return }
+    if (!pilot.animate) { return }
+    if (!force && (!data || !data.isOsc)) { return }
     setContent(this.osc_el, `${this.node.oscillator ? wavCode(this.node.oscillator._oscillator.type) : '--'}${this.node.modulation ? wavCode(this.node.modulation._oscillator.type) : '--'}`)
   }
 
@@ -159,7 +157,7 @@ export default function ChannelInterface (pilot, id, node) {
     const decay = msg.length > 1 ? int36(msg.substr(1, 1)) / 15 : null
     const sustain = msg.length > 2 ? int36(msg.substr(2, 1)) / 15 : null
     const release = msg.length > 3 ? int36(msg.substr(3, 1)) / 15 : null
-    return { isEnv: true, attack: attack, decay: decay, sustain: sustain, release: release, string: 'env' }
+    return { isEnv: true, attack, decay, sustain, release, string: 'env' }
   }
 
   function parseOsc (msg) {

@@ -45,7 +45,7 @@ export default function Interface (pilot, id, node) {
   }
 
   function draw (level) {
-    if (pilot.animate !== true) { return }
+    if (!pilot.animate) { return }
     if (lastUpdate && performance.now() - lastUpdate < 30) { return }
 
     context.clearRect(0, 0, canvasWidth, canvasHeight)

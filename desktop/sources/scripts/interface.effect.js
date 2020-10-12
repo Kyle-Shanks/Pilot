@@ -1,5 +1,4 @@
 import Interface from './interface.js'
-const Tone = require('tone')
 
 export default function EffectInterface (pilot, id, node) {
   Interface.call(this, pilot, id, node, true)
@@ -87,8 +86,8 @@ export default function EffectInterface (pilot, id, node) {
   }
 
   this.updateEffect = function (data, force = false) {
-    if (pilot.animate !== true) { return }
-    if (force !== true && (!data || !data.isEffect)) { return }
+    if (!pilot.animate) { return }
+    if (!force && (!data || !data.isEffect)) { return }
 
     let value = 0
     if (id === 'rev') {
